@@ -1,10 +1,16 @@
-
 import socket
+
+#Constants
+
 END_OF_HEADER: str = ";"
 END_CONNECTION_MESSAGE: str = "Successfully executed !"
 SEND_FILE_MESSAGE: str = "Great!\nNow I am ready to receive the file. Please send its contents as raw bytes."
 PORT: int = 4422
+DATABASE_PATH: str = "database"
+STARTING_DOWNLOAD_MESSAGE: str = "DOWNLOAD:"
 
+
+#The following methods are used for sending and receiving regular data (sentences in the conversation)
 def get_response(conv_socket: socket.socket) -> str:
     data_received: str = ""
 

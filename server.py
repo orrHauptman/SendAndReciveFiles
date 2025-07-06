@@ -30,7 +30,7 @@ def upload():
 
     send_data("Lets start the uploading process!\nPlease choose a name for your file so you can later download it:\n" , conv_socket)
     file_name: str = get_response(conv_socket)
-    existing_files: list[str] = [os.path.basename(path) for path in os.listdir("database") ] 
+    existing_files: list[str] = [os.path.basename(path) for path in os.listdir(DATABASE_PATH) ] 
 
 
     while(file_name in existing_files ):
@@ -41,7 +41,7 @@ def upload():
 
     content: bytes = get_response_in_bytes(conv_socket)
 
-    with open(f"database/{file_name}" , "wb") as file:
+    with open(f"{DATABASE_PATH}/{file_name}" , "wb") as file:
         file.write(content)
         send_data(END_CONNECTION_MESSAGE , conv_socket)
 
@@ -51,8 +51,19 @@ def download():
 
     global conv_socket
 
+    existing_files: str = " , ".join([os.path.basename(path) for path in os.listdir(DATABASE_PATH) ])
 
-    pass
+    send_data(f"Lets start the downloading process!\nWrite the name of the file you want to download from the following options:\n{existing_files} " ,conv_socket)
+
+    file_name: str = get_response(conv_socket)
+
+    while not os.path.exists(f"{DATABASE_PATH}/{file_name}") :
+        send_data(f"File doesn't exists!\nPlease choose from the following:\n{existing_files}" , conv_socket)
+        file_name = get_response(conv_socket)
+
+    file_data: bytes = get_file(f"{DATABASE_PATH}/{file_name}")
+
+    send_bytes(f"{STARTING_DOWNLOAD_MESSAGE}".encode("utf-8") + file_data , conv_socket)
 
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listening_socket :
