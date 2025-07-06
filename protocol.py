@@ -1,6 +1,6 @@
 import socket
 
-#Constants
+# Protocol and configuration constants
 
 END_OF_HEADER: str = ";"
 END_CONNECTION_MESSAGE: str = "Successfully executed !"
@@ -10,7 +10,8 @@ DATABASE_PATH: str = "database"
 STARTING_DOWNLOAD_MESSAGE: str = "DOWNLOAD:"
 
 
-#The following methods are used for sending and receiving regular data (sentences in the conversation)
+# Send/receive text-based protocol messages
+
 def get_response(conv_socket: socket.socket) -> str:
     data_received: str = ""
 
@@ -32,7 +33,8 @@ def get_response(conv_socket: socket.socket) -> str:
 def send_data(data: str ,conv_socket: socket.socket):
     conv_socket.send(f"{len(data.encode('utf-8'))}{END_OF_HEADER}{data}".encode("utf-8"))
 
-# The following methods are used for sending and receiving the context of the files
+# Send/receive raw file data (as bytes)
+
 
 def get_response_in_bytes(conv_socket: socket.socket) -> bytes:
     data_received: bytes = b""

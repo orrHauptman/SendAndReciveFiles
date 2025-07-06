@@ -65,7 +65,7 @@ def download():
 
     send_bytes(f"{STARTING_DOWNLOAD_MESSAGE}".encode("utf-8") + file_data , conv_socket)
 
-    #Deleting the file from the data base
+    #Deleting the file from the database
     os.remove(file_path)
 
 
