@@ -55,15 +55,18 @@ def download():
 
     send_data(f"Lets start the downloading process!\nWrite the name of the file you want to download from the following options:\n{existing_files} " ,conv_socket)
 
-    file_name: str = get_response(conv_socket)
+    file_path: str =f"{DATABASE_PATH}/{get_response(conv_socket)}"
 
-    while not os.path.exists(f"{DATABASE_PATH}/{file_name}") :
+    while not os.path.exists(file_path) :
         send_data(f"File doesn't exists!\nPlease choose from the following:\n{existing_files}" , conv_socket)
-        file_name = get_response(conv_socket)
+        file_path = f"{DATABASE_PATH}/{get_response(conv_socket)}"
 
-    file_data: bytes = get_file(f"{DATABASE_PATH}/{file_name}")
+    file_data: bytes = get_file(file_path)
 
     send_bytes(f"{STARTING_DOWNLOAD_MESSAGE}".encode("utf-8") + file_data , conv_socket)
+
+    #Deleting the file from the data base
+    os.remove(file_path)
 
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listening_socket :
